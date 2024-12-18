@@ -10,13 +10,13 @@ export function About() {
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <div>
-            <img
-              src="/meredith-francis-headshot.jpg"
-              alt="Professional portrait"
-              className="rounded-lg shadow-lg w-full h-[400px] object-cover"
-            />
-          </div>
+  <div className="flex justify-center items-center">
+    <img
+      src="/meredith-francis-headshot.jpg"
+      alt="Professional portrait"
+      className="rounded-lg shadow-lg w-auto h-[400px] object-cover"
+    />
+  </div>
 
           <div className="space-y-6">
             <p className="text-gray-700 leading-relaxed">

@@ -26,7 +26,6 @@ export function ContactInfo() {
       </p>
 
       <div className="space-y-6">
-        <ContactItem icon={Mail} text="m.francislaw@gmail.com" />
         <ContactItem icon={Phone} text="Available by appointment" />
         <ContactItem icon={MapPin} text="Georgia & Florida" />
       </div>

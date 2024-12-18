@@ -15,7 +15,7 @@ export function About() {
             <img
               src="/meredith-francis-headshot.jpg"
               alt="Meredith Francis - Technology and Corporate Law Attorney"
-              className="rounded-lg shadow-lg w-full h-[400px] object-cover"
+              className="rounded-lg shadow-lg w-auto h-[400px] object-cover"
             />
           </div>
 

@@ -28,10 +28,6 @@ export function Contact() {
 
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
-                <Mail className="w-6 h-6 text-[#DAA520]" />
-                <span className="text-gray-600">m.francislaw@gmail.com</span>
-              </div>
-              <div className="flex items-center space-x-4">
                 <Phone className="w-6 h-6 text-[#DAA520]" />
                 <span className="text-gray-600">Available by appointment</span>
               </div>
