@@ -27,7 +27,7 @@ function doGet(e) {
     ]);
     
     // Send email notification
-    const recipientEmail = 'francislawpractice@gmail.com';
+    const recipientEmail = 'hello@francislawpractice.com';
     const subject = `New Contact Form Submission: ${params.subject}`;
     const emailBody = `
       New contact form submission:

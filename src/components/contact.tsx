@@ -27,7 +27,7 @@ export function Contact() {
 
     try {
       // Create base URL
-      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywIWa6HpBfzUKiCaRdF_MwEmB7VRexTojvz2i9trIOQo4nUj_GOAWg5an1B3_StGlBDw/exec'; // ends with /exec
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxP_NleeUrf8AJBQ35SXPZrqot66jiAtvExy_o_kqbZN04zDj6OvYMxf7aPUtU-IK1CvA/exec'; // ends with /exec
       const url = new URL(SCRIPT_URL);
       
       // Add form data as URL parameters
