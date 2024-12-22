@@ -19,7 +19,7 @@ export function Contact() {
     };
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbzRvYqoPALq4FSoVW0R3usTXYOBaAUh-uxekdvJ4mQcyVmXAed_RAH-mWr3QSorrkILLQ/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbwLW74bIf5cauYRI9M2U9fO67klKBIBPWh2blhQtVKS/dev', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
