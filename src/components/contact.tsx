@@ -2,10 +2,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Phone, MapPin } from 'lucide-react';
+import { useState } from 'react';
 
 export function Contact() {
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setStatus('loading');
+    setErrorMessage('');
+    
     const form = e.currentTarget;
     const formData = new FormData(form);
     
@@ -63,11 +70,12 @@ export function Contact() {
 
       // Wait for response
       await responsePromise;
-      alert('Message sent successfully!');
+      setStatus('success');
       form.reset();
     } catch (error) {
       console.error('Error:', error);
-      alert('Failed to send message. Please try again later.');
+      setStatus('error');
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message');
     }
   };
 
@@ -126,9 +134,30 @@ export function Contact() {
             <Button
               type="submit"
               className="w-full bg-[#001F54] hover:bg-[#002D7A] text-white"
+              disabled={status === 'loading'}
             >
-              Send Message
+              {status === 'loading' ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Sending...
+                </span>
+              ) : 'Send Message'}
             </Button>
+
+            {status === 'success' && (
+              <div className="p-4 bg-green-50 text-green-700 rounded-md">
+                Message sent successfully! We'll get back to you soon.
+              </div>
+            )}
+
+            {status === 'error' && (
+              <div className="p-4 bg-red-50 text-red-700 rounded-md">
+                {errorMessage || 'Failed to send message. Please try again later.'}
+              </div>
+            )}
           </form>
         </div>
       </div>
