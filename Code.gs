@@ -30,7 +30,7 @@ function doPost(e) {
     ]);
     
     // Send email notification
-    const recipientEmail = 'your-email@example.com'; // Replace with your email
+    const recipientEmail = 'francislawpractice@gmail.com';
     const subject = `New Contact Form Submission: ${data.subject}`;
     const emailBody = `
       New contact form submission:
