@@ -4,9 +4,39 @@ import { Textarea } from '@/components/ui/textarea';
 import { Phone, MapPin } from 'lucide-react';
 
 export function Contact() {
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    const data = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      subject: formData.get('subject'),
+      message: formData.get('message'),
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbzRvYqoPALq4FSoVW0R3usTXYOBaAUh-uxekdvJ4mQcyVmXAed_RAH-mWr3QSorrkILLQ/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert('Message sent successfully!');
+        form.reset();
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message. Please try again later.');
+    }
   };
 
   return (
@@ -41,20 +71,21 @@ export function Contact() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Input placeholder="First Name" required />
+                <Input name="firstName" placeholder="First Name" required />
               </div>
               <div>
-                <Input placeholder="Last Name" required />
+                <Input name="lastName" placeholder="Last Name" required />
               </div>
             </div>
             <div>
-              <Input type="email" placeholder="Email" required />
+              <Input name="email" type="email" placeholder="Email" required />
             </div>
             <div>
-              <Input placeholder="Subject" required />
+              <Input name="subject" placeholder="Subject" required />
             </div>
             <div>
               <Textarea
+                name="message"
                 placeholder="Your message"
                 className="min-h-[150px]"
                 required
