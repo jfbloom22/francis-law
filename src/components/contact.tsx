@@ -19,20 +19,52 @@ export function Contact() {
     };
 
     try {
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwWWGtrPBkG-Cyy0csGxdUsusFA0I3-T1l_WEIZiHOcKtjSr95cWgOffeQ84MLOsIIlsw/exec', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      // Create base URL
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywIWa6HpBfzUKiCaRdF_MwEmB7VRexTojvz2i9trIOQo4nUj_GOAWg5an1B3_StGlBDw/exec'; // ends with /exec
+      const url = new URL(SCRIPT_URL);
+      
+      // Add form data as URL parameters
+      Object.entries(data).forEach(([key, value]) => {
+        url.searchParams.append(key, value as string);
       });
 
-      if (response.ok) {
-        alert('Message sent successfully!');
-        form.reset();
-      } else {
-        throw new Error('Failed to send message');
-      }
+      // Create and append script element
+      const script = document.createElement('script');
+      const callbackName = 'jsonpCallback_' + Date.now();
+      
+      const responsePromise = new Promise((resolve, reject) => {
+        // Define callback
+        // @ts-expect-error - we know this is a string
+        window[callbackName as any] = (response: unknown) => {
+          if (response && typeof response === 'object' && 'result' in response && response.result === 'success') {
+            resolve(response);
+          } else {
+            console.log(response);
+            const message = response && typeof response === 'object' && 'message' in response ? response.message as string : 'Submission failed';
+            reject(new Error(message));
+          }
+          // Cleanup
+          delete window[callbackName as any];
+          document.body.removeChild(script);
+        };
+        
+        // Handle script load error
+        script.onerror = () => {
+          delete window[callbackName as any];
+          document.body.removeChild(script);
+          reject(new Error('Failed to send message'));
+        };
+      });
+
+      // Add callback parameter and create script
+      url.searchParams.append('callback', callbackName);
+      script.src = url.toString();
+      document.body.appendChild(script);
+
+      // Wait for response
+      await responsePromise;
+      alert('Message sent successfully!');
+      form.reset();
     } catch (error) {
       console.error('Error:', error);
       alert('Failed to send message. Please try again later.');

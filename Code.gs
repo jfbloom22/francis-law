@@ -9,37 +9,34 @@ function doOptions(e) {
     .setHeader('Access-Control-Max-Age', '86400');
 }
 
-function doPost(e) {
-  // Create output with specific CORS header for your domain
-  const output = ContentService.createTextOutput()
-    .setMimeType(ContentService.MimeType.JSON)
-    .setHeader('Access-Control-Allow-Origin', 'https://www.francislawpractice.com');
+function doGet(e) {
+  const params = e.parameter;
+  const callback = params.callback;
   
   try {
-    const data = JSON.parse(e.postData.contents);
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     
     // Save to spreadsheet
     sheet.appendRow([
-      data.firstName,
-      data.lastName,
-      data.email,
-      data.subject,
-      data.message,
-      data.timestamp
+      params.firstName,
+      params.lastName,
+      params.email,
+      params.subject,
+      params.message,
+      params.timestamp
     ]);
     
     // Send email notification
     const recipientEmail = 'francislawpractice@gmail.com';
-    const subject = `New Contact Form Submission: ${data.subject}`;
+    const subject = `New Contact Form Submission: ${params.subject}`;
     const emailBody = `
       New contact form submission:
       
-      Name: ${data.firstName} ${data.lastName}
-      Email: ${data.email}
-      Subject: ${data.subject}
-      Message: ${data.message}
-      Timestamp: ${data.timestamp}
+      Name: ${params.firstName} ${params.lastName}
+      Email: ${params.email}
+      Subject: ${params.subject}
+      Message: ${params.message}
+      Timestamp: ${params.timestamp}
     `;
     
     MailApp.sendEmail({
@@ -48,11 +45,15 @@ function doPost(e) {
       body: emailBody
     });
 
-    output.setContent(JSON.stringify({ 'result': 'success' }));
+    // Return JSONP response
+    return ContentService.createTextOutput(
+      `${callback}({"result":"success"})`
+    ).setMimeType(ContentService.MimeType.JAVASCRIPT);
+
   } catch (error) {
-    console.error('Error:', error);
-    output.setContent(JSON.stringify({ 'result': 'error', 'message': error.toString() }));
+    // Return error in JSONP format
+    return ContentService.createTextOutput(
+      `${callback}({"result":"error","message":"${error.toString()}"})`
+    ).setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
-  
-  return output;
 } 
